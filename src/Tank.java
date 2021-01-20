@@ -12,6 +12,7 @@ public class Tank {
     private Dir dir = Dir.DOWN;
     private Boolean moving = false;
     private TankFrame tf = null;
+    private Boolean live = true;
 
 
 
@@ -70,9 +71,9 @@ public class Tank {
         move();
     }
 
+    //根据方向前进
     private void move() {
         if(!moving) return;
-        //根据方向前进
         switch (dir){
             case LEFT: x -= SPEED; break;
             case RIGHT: x += SPEED; break;
@@ -81,9 +82,15 @@ public class Tank {
         }
     }
 
+
     public void fire() {
-        tf.bullets.add(new Bullet(this.x+50/2-5, this.y+50/2-5, this.dir, this.tf));
+        tf.bullets.add(new Bullet(this.x + ResourceMgr.Tank_WIDTH/2 - ResourceMgr.BULLET_WIDTH/2,
+                this.y + ResourceMgr.Tank_HEIGHT/2 - ResourceMgr.BULLET_HEIGHT/2, this.dir, this.tf));
     }
 
 
+    public void die() {
+        live = false;
+        tf.enemies.remove(this);
+    }
 }

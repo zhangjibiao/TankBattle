@@ -9,7 +9,7 @@ public class Bullet {
     private boolean live = true;
     TankFrame tf = null;
 
-    public Bullet(int x, int y, Dir dir,TankFrame tf) {
+    public Bullet(int x, int y, Dir dir, TankFrame tf) {
         this.x = x;
         this.y = y;
         this.dir = dir;
@@ -42,18 +42,22 @@ public class Bullet {
         this.dir = dir;
     }
 
-    public void paint(Graphics g){
-        if(!live) {
+    public void paint(Graphics g) {
+        if (!live) {
             tf.bullets.remove(this);
         }
-        switch(dir){
-            case UP: g.drawImage(ResourceMgr.bulletU,x,y,null);
+        switch (dir) {
+            case UP:
+                g.drawImage(ResourceMgr.bulletU, x, y, null);
                 break;
-            case DOWN:g.drawImage(ResourceMgr.bulletD,x,y,null);
+            case DOWN:
+                g.drawImage(ResourceMgr.bulletD, x, y, null);
                 break;
-            case LEFT:g.drawImage(ResourceMgr.bulletL,x,y,null);
+            case LEFT:
+                g.drawImage(ResourceMgr.bulletL, x, y, null);
                 break;
-            case RIGHT:g.drawImage(ResourceMgr.bulletR,x,y,null);
+            case RIGHT:
+                g.drawImage(ResourceMgr.bulletR, x, y, null);
                 break;
         }
 
@@ -62,16 +66,36 @@ public class Bullet {
     }
 
     private void move() {
-        switch(dir){
-            case LEFT: x -= SPEED; break;
-            case RIGHT: x += SPEED; break;
-            case UP: y -= SPEED; break;
-            case DOWN: y += SPEED; break;
+        switch (dir) {
+            case LEFT:
+                x -= SPEED;
+                break;
+            case RIGHT:
+                x += SPEED;
+                break;
+            case UP:
+                y -= SPEED;
+                break;
+            case DOWN:
+                y += SPEED;
+                break;
 
         }
 
-        if(x < 0 || y < 0 || x > TankFrame.GAME_WIDTH || y > TankFrame.GAME_HEIGHT) live = false;
+        if (x < 0 || y < 0 || x > TankFrame.GAME_WIDTH || y > TankFrame.GAME_HEIGHT) live = false;
     }
 
 
+    public void collideWith(Tank tank) {
+        Rectangle rec1 = new Rectangle(x, y, ResourceMgr.BULLET_WIDTH, ResourceMgr.BULLET_HEIGHT);
+        Rectangle rec2 = new Rectangle(tank.getX(), tank.getY(), ResourceMgr.Tank_WIDTH, ResourceMgr.Tank_HEIGHT);
+        if (rec1.intersects(rec2)) {
+            this.die();
+            tank.die();
+        }
+    }
+
+    private void die() {
+        live = false;
+    }
 }

@@ -9,7 +9,9 @@ import java.util.List;
 public class TankFrame extends Frame {
     static final int GAME_WIDTH = 800, GAME_HEIGHT=800;
     Tank mytank = new Tank(400,400,Dir.DOWN, this);
+    List<Tank> enemies =new ArrayList<>();
     List<Bullet> bullets = new ArrayList<>();
+
 
 
     public TankFrame(){
@@ -27,6 +29,10 @@ public class TankFrame extends Frame {
                 System.exit(0);
             }});
         addKeyListener(new MyKeyListener());
+
+        for(int i=0; i<=5; i++){
+            enemies.add(new Tank(100+100*i, 200, Dir.DOWN, this));
+        }
     }
 
     // 解决双缓存问题
@@ -47,16 +53,27 @@ public class TankFrame extends Frame {
 
     @Override
     public void paint(Graphics g) {
-        //显示子弹数量
+        //显示子弹，敌人数量
         Color c = g.getColor();
         g.setColor(Color.WHITE);
         g.drawString("子弹的数量:" + bullets.size(), 10, 60);
+        g.drawString("敌人的数量:" + enemies.size(), 10, 100);
         g.setColor(c);
 
+        //碰撞检测
+        for(int i=0; i<bullets.size();i++){
+            for(int j=0; j<enemies.size();j++){
+                bullets.get(i).collideWith(enemies.get(j));
+            }
+        }
+        //画出主战坦克、子弹，敌军坦克
        mytank.paint(g);
        for(int i=0; i<bullets.size(); i++) {
             bullets.get(i).paint(g);
         }
+       for(int i=0; i<enemies.size();i++){
+           enemies.get(i).paint(g);
+       }
     }
 
     class MyKeyListener extends KeyAdapter{
