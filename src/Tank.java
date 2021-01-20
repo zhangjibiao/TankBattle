@@ -6,7 +6,6 @@ import java.awt.event.WindowEvent;
 
 public class Tank {
     private static final int SPEED = 10;
-    //设置坦克出现屏幕中心
     private int x;
     private int y;
 
@@ -83,7 +82,7 @@ public class Tank {
     }
 
     public void fire() {
-        tf.bullets.add(new Bullet(this.x, this.y, this.dir, this.tf));
+        tf.bullets.add(new Bullet(this.x+50/2-5, this.y+50/2-5, this.dir, this.tf));
     }
 
 

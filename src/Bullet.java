@@ -46,12 +46,19 @@ public class Bullet {
         if(!live) {
             tf.bullets.remove(this);
         }
+        switch(dir){
+            case UP: g.drawImage(ResourceMgr.bulletU,x,y,null);
+                break;
+            case DOWN:g.drawImage(ResourceMgr.bulletD,x,y,null);
+                break;
+            case LEFT:g.drawImage(ResourceMgr.bulletL,x,y,null);
+                break;
+            case RIGHT:g.drawImage(ResourceMgr.bulletR,x,y,null);
+                break;
+        }
 
-        Color c = g.getColor();
-        g.setColor(Color.RED);
         move();
-        g.fillOval(x,y,WIDTH,HEIGHT);
-        g.setColor(c);
+
     }
 
     private void move() {
