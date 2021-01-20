@@ -3,18 +3,27 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Random;
 
 public class Tank {
-    private static final int SPEED = 10;
+    private static final int SPEED = 5;
     private int x;
     private int y;
 
     private Dir dir = Dir.DOWN;
+
+    public Boolean getMoving() {
+        return moving;
+    }
+
     private Boolean moving = false;
     private TankFrame tf = null;
     private Boolean live = true;
+    private Group group ;
 
-
+    public Group getGroup() {
+        return group;
+    }
 
     public int getX() {
         return x;
@@ -40,11 +49,12 @@ public class Tank {
         this.dir = dir;
     }
 
-    public Tank(int x, int y, Dir dir,TankFrame tf) {
+    public Tank(int x, int y, Dir dir,TankFrame tf,Group group) {
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.tf =tf;
+        this.group = group;
     }
 
     public Boolean istMoving() {
@@ -67,7 +77,6 @@ public class Tank {
             case RIGHT:g.drawImage(ResourceMgr.tankR,x,y,null);
                 break;
         }
-
         move();
     }
 
@@ -75,22 +84,55 @@ public class Tank {
     private void move() {
         if(!moving) return;
         switch (dir){
-            case LEFT: x -= SPEED; break;
-            case RIGHT: x += SPEED; break;
-            case UP: y -= SPEED; break;
-            case DOWN: y += SPEED; break;
+            //TODO:优化边缘检测
+            case LEFT: {
+                if(x > 0)
+                    x -= SPEED;
+                break;}
+            case RIGHT:{
+                if(x < TankFrame.GAME_WIDTH-ResourceMgr.Tank_WIDTH)
+                    x += SPEED;
+                break;}
+            case UP:{
+                if(y > tf.getInsets().top-tf.getInsets().bottom)
+                    y -= SPEED;
+                break;}
+            case DOWN:{
+                if(y < TankFrame.GAME_HEIGHT-ResourceMgr.Tank_HEIGHT)
+                    y += SPEED;
+                break;}
         }
     }
 
 
-    public void fire() {
+    public void fire(Group group) {
         tf.bullets.add(new Bullet(this.x + ResourceMgr.Tank_WIDTH/2 - ResourceMgr.BULLET_WIDTH/2,
-                this.y + ResourceMgr.Tank_HEIGHT/2 - ResourceMgr.BULLET_HEIGHT/2, this.dir, this.tf));
+                this.y + ResourceMgr.Tank_HEIGHT/2 - ResourceMgr.BULLET_HEIGHT/2, this.dir, this.tf, group));
     }
 
 
     public void die() {
         live = false;
         tf.enemies.remove(this);
+    }
+
+    // 敌军坦克，自动开火
+    public void autodrive() {
+        if(new Random().nextInt(10) > 8){ //3/10 的概率改变方向
+            switch (new Random().nextInt(4)){ //随机改变方向
+                case 0: this.dir = Dir.UP; break;
+                case 1: this.dir = Dir.DOWN; break;
+                case 2: this.dir = Dir.LEFT; break;
+                case 3: this.dir = Dir.RIGHT; break;
+            }
+        }
+
+
+    }
+
+    public void autofire(Group group) {
+        if (new Random().nextInt(100) > 95) { // 1/10 的概率开火
+            this.fire(group);
+        }
     }
 }

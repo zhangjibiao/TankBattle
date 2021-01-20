@@ -5,14 +5,25 @@ public class Bullet {
     private static int WIDTH = 30, HEIGHT = 30;
     private int x;
     private int y;
+    private Group group;
 
     private boolean live = true;
-    TankFrame tf = null;
 
-    public Bullet(int x, int y, Dir dir, TankFrame tf) {
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
+
+    TankFrame tf = null; //获取其引用
+
+    public Bullet(int x, int y, Dir dir, TankFrame tf, Group group) {
         this.x = x;
         this.y = y;
         this.dir = dir;
+        this.group = group;
         this.tf = tf;
     }
 
@@ -87,6 +98,9 @@ public class Bullet {
 
 
     public void collideWith(Tank tank) {
+        //如果属于我方子弹，没有友方伤害，直接返回
+        if(this.group == tank.getGroup()) return;
+
         Rectangle rec1 = new Rectangle(x, y, ResourceMgr.BULLET_WIDTH, ResourceMgr.BULLET_HEIGHT);
         Rectangle rec2 = new Rectangle(tank.getX(), tank.getY(), ResourceMgr.Tank_WIDTH, ResourceMgr.Tank_HEIGHT);
         if (rec1.intersects(rec2)) {

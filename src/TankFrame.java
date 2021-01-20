@@ -8,15 +8,13 @@ import java.util.List;
 
 public class TankFrame extends Frame {
     static final int GAME_WIDTH = 800, GAME_HEIGHT=800;
-    Tank mytank = new Tank(400,400,Dir.DOWN, this);
+    Tank mytank = new Tank(400,400,Dir.DOWN, this, Group.Good);
     List<Tank> enemies =new ArrayList<>();
     List<Bullet> bullets = new ArrayList<>();
 
 
 
     public TankFrame(){
-
-
         setSize(GAME_WIDTH, GAME_HEIGHT);
         setResizable(false);
         setTitle("Tank Battle");
@@ -31,7 +29,8 @@ public class TankFrame extends Frame {
         addKeyListener(new MyKeyListener());
 
         for(int i=0; i<=5; i++){
-            enemies.add(new Tank(100+100*i, 200, Dir.DOWN, this));
+            enemies.add(new Tank(100+100*i, 200, Dir.DOWN, this, Group.Bad));
+            enemies.get(i).setMoving(true);
         }
     }
 
@@ -61,17 +60,24 @@ public class TankFrame extends Frame {
         g.setColor(c);
 
         //碰撞检测
+        //Idea： 每个坦克添加bullet数组，如果是自己的bullet则无伤害
         for(int i=0; i<bullets.size();i++){
             for(int j=0; j<enemies.size();j++){
                 bullets.get(i).collideWith(enemies.get(j));
             }
         }
+
+        //边缘检测
+
+
         //画出主战坦克、子弹，敌军坦克
        mytank.paint(g);
        for(int i=0; i<bullets.size(); i++) {
             bullets.get(i).paint(g);
         }
        for(int i=0; i<enemies.size();i++){
+           enemies.get(i).autodrive();
+           enemies.get(i).autofire(Group.Bad);
            enemies.get(i).paint(g);
        }
     }
@@ -109,7 +115,7 @@ public class TankFrame extends Frame {
                 case(KeyEvent.VK_UP):  BU = false; break;
                 case(KeyEvent.VK_DOWN):  BD = false; break;
                 case KeyEvent.VK_CONTROL:
-                    mytank.fire();
+                    mytank.fire(Group.Good);
                     break;
                 default:break;
             }
