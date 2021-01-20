@@ -3,11 +3,14 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TankFrame extends Frame {
-    private static final int GAME_WIDTH = 800, GAME_HEIGHT=800;
+    static final int GAME_WIDTH = 800, GAME_HEIGHT=800;
     Tank mytank = new Tank(400,400,Dir.DOWN, this);
-    Bullet b = new Bullet(300, 300, Dir.DOWN);
+    List<Bullet> bullets = new ArrayList<>();
+
 
     public TankFrame(){
 
@@ -44,8 +47,16 @@ public class TankFrame extends Frame {
 
     @Override
     public void paint(Graphics g) {
+        //显示子弹数量
+        Color c = g.getColor();
+        g.setColor(Color.WHITE);
+        g.drawString("子弹的数量:" + bullets.size(), 10, 60);
+        g.setColor(c);
+
        mytank.paint(g);
-       b.paint(g);
+       for(int i=0; i<bullets.size(); i++) {
+            bullets.get(i).paint(g);
+        }
     }
 
     class MyKeyListener extends KeyAdapter{

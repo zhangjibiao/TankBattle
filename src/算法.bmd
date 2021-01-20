@@ -31,13 +31,33 @@
         <picture_thumb_size>100, 100</picture_thumb_size>
       </style>
       <nodes>
-        <node id="1" text="中心主题" x="523" y="377" width="78" height="41" text_b="12, 12, 54, 17">
+        <node id="1" text="中心主题" x="748" y="377" width="78" height="41" text_b="12, 12, 54, 17">
           <style>
             <back_color>Silver</back_color>
             <fore_color>Black</fore_color>
             <border_color>Black</border_color>
             <padding>12</padding>
           </style>
+          <nodes>
+            <node id="1" text="键盘按下" x="610" y="387" width="58" height="21" text_b="2, 2, 54, 17" fold_btn_b="596, 391, 13, 13">
+              <nodes>
+                <node id="2" text="改变键盘布尔值" x="435" y="387" width="95" height="21" text_b="2, 2, 91, 17" fold_btn_b="421, 391, 13, 13">
+                  <nodes>
+                    <node id="3" text="改变方向" x="297" y="387" width="58" height="21" text_b="2, 2, 54, 17" />
+                  </nodes>
+                  <lines>
+                    <line target="3" begin_side="Left" end_side="Right" begin_rect="422, 387, 108, 21" end_rect="297, 387, 58, 21" />
+                  </lines>
+                </node>
+              </nodes>
+              <lines>
+                <line target="2" begin_side="Left" end_side="Right" begin_rect="597, 387, 71, 21" end_rect="435, 387, 95, 21" />
+              </lines>
+            </node>
+          </nodes>
+          <lines>
+            <line target="1" begin_side="Left" end_side="Right" begin_rect="748, 377, 78, 41" end_rect="610, 387, 58, 21" />
+          </lines>
         </node>
       </nodes>
     </chart>

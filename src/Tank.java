@@ -56,11 +56,19 @@ public class Tank {
     }
 
     public void paint(Graphics g) {
-        Color c = g.getColor();
-        g.setColor(Color.BLUE);
+        //根据方向确定图片
+        switch(dir){
+            case UP: g.drawImage(ResourceMgr.tankU,x,y,null);
+                break;
+            case DOWN:g.drawImage(ResourceMgr.tankD,x,y,null);
+                break;
+            case LEFT:g.drawImage(ResourceMgr.tankL,x,y,null);
+                break;
+            case RIGHT:g.drawImage(ResourceMgr.tankR,x,y,null);
+                break;
+        }
+
         move();
-        g.fillRect(x,y,20,20);
-        g.setColor(c);
     }
 
     private void move() {
@@ -75,7 +83,7 @@ public class Tank {
     }
 
     public void fire() {
-        tf.b = new Bullet(this.x, this.y, this.dir);
+        tf.bullets.add(new Bullet(this.x, this.y, this.dir, this.tf));
     }
 
 
