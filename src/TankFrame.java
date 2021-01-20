@@ -5,23 +5,14 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 public class TankFrame extends Frame {
-    private static final int SPEED = 10;
-    //设置坦克出现屏幕中心
-    private int x= 800/2;
-    private int y= 800/2;
-    private Dir dir = Dir.DOWN;
-
-    //键盘布尔值
-    boolean BL = false;
-    boolean BR = false;
-    boolean BU = false;
-    boolean BD = false;
-
+    private static final int GAME_WIDTH = 800, GAME_HEIGHT=800;
+    Tank mytank = new Tank(400,400,Dir.DOWN, this);
+    Bullet b = new Bullet(300, 300, Dir.DOWN);
 
     public TankFrame(){
 
 
-        setSize(800,800);
+        setSize(GAME_WIDTH, GAME_HEIGHT);
         setResizable(false);
         setTitle("Tank Battle");
         setVisible(true);
@@ -35,17 +26,34 @@ public class TankFrame extends Frame {
         addKeyListener(new MyKeyListener());
     }
 
+    // 解决双缓存问题
+    Image offScreenImage = null; //定义一个Image
+    @Override
+    public void update(Graphics g) {    //调用repaint方法时，会先调用update
+        if(offScreenImage == null) {
+            offScreenImage = this.createImage(GAME_WIDTH, GAME_HEIGHT);
+        }
+        Graphics gOffScreen = offScreenImage.getGraphics();
+        Color c = gOffScreen.getColor();
+        gOffScreen.setColor(Color.BLACK);
+        gOffScreen.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+        gOffScreen.setColor(c);
+        paint(gOffScreen);
+        g.drawImage(offScreenImage, 0, 0, null);
+    }
+
     @Override
     public void paint(Graphics g) {
-        //根据键盘布尔值确定方向
-        if(BL) x -= 10;
-        if(BR) x += 10;
-        if(BU) y -= 10;
-        if(BD) y += 10;
-        g.fillRect(x,y,20,20);
+       mytank.paint(g);
+       b.paint(g);
     }
 
     class MyKeyListener extends KeyAdapter{
+        //键盘布尔值
+        boolean BL = false;
+        boolean BR = false;
+        boolean BU = false;
+        boolean BD = false;
 
         @Override
         //根据按键方向使坦克前进
@@ -63,8 +71,6 @@ public class TankFrame extends Frame {
             setdir();
         }
 
-
-
         //
         @Override
         public void keyReleased(KeyEvent e) {
@@ -74,6 +80,9 @@ public class TankFrame extends Frame {
                 case(KeyEvent.VK_RIGHT): BR = false; break;
                 case(KeyEvent.VK_UP):  BU = false; break;
                 case(KeyEvent.VK_DOWN):  BD = false; break;
+                case KeyEvent.VK_CONTROL:
+                    mytank.fire();
+                    break;
                 default:break;
             }
             //根据键盘布尔值改变方向
@@ -81,12 +90,14 @@ public class TankFrame extends Frame {
         }
 
         private void setdir() {
-            if(!BU && !BD && !BL && !BR) ;
+            if(!BU && !BD && !BL && !BR) mytank.setMoving(false);
             else{
-                if(BU) y -= SPEED;
-                if(BD) y += SPEED;
-                if(BR) x += SPEED;
-                if(BL) x -= SPEED;
+                mytank.setMoving(true);
+
+                if(BU) mytank.setDir(Dir.UP);
+                if(BD) mytank.setDir(Dir.DOWN);
+                if(BR) mytank.setDir(Dir.RIGHT);
+                if(BL) mytank.setDir(Dir.LEFT);
             }
         }
     }
