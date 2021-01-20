@@ -1,5 +1,4 @@
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -8,6 +7,9 @@ public class ResourceMgr {
     public static BufferedImage tankU,tankD,tankL,tankR;
     public static BufferedImage bulletU,bulletD,bulletL,bulletR;
     public static int Tank_WIDTH,Tank_HEIGHT,BULLET_WIDTH, BULLET_HEIGHT;
+    public static BufferedImage[] Explode = new BufferedImage[16];
+    public static int Explode_WIDTH;
+    public static int Explode_HEIGHT;
 
     static{
         try{
@@ -24,6 +26,11 @@ public class ResourceMgr {
             bulletL = ImageIO.read(ResourceMgr.class.getClassLoader().getResourceAsStream("images/bulletL.gif"));
             BULLET_WIDTH = bulletL.getWidth();
             BULLET_HEIGHT = bulletL.getHeight();
+
+            for(int i=0; i<16; i++){
+                Explode[i] = ImageIO.read(ResourceMgr.class.getClassLoader().getResourceAsStream("images/e"+(i+1)+".gif"));}
+            Explode_WIDTH = Explode[0].getWidth();
+            Explode_HEIGHT = Explode[0].getHeight();
         }
         catch (IOException e){
             e.printStackTrace();

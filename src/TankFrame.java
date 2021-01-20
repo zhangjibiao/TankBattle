@@ -11,14 +11,17 @@ public class TankFrame extends Frame {
     Tank mytank = new Tank(400,400,Dir.DOWN, this, Group.Good);
     List<Tank> enemies =new ArrayList<>();
     List<Bullet> bullets = new ArrayList<>();
+    Explode e =new Explode(200,200,this);
 
 
 
     public TankFrame(){
+
         setSize(GAME_WIDTH, GAME_HEIGHT);
         setResizable(false);
         setTitle("Tank Battle");
         setVisible(true);
+
 
         //设置窗口监听器，使窗口能被用户关闭
         addWindowListener( new WindowAdapter() { //匿名内部类
@@ -63,12 +66,9 @@ public class TankFrame extends Frame {
         //Idea： 每个坦克添加bullet数组，如果是自己的bullet则无伤害
         for(int i=0; i<bullets.size();i++){
             for(int j=0; j<enemies.size();j++){
-                bullets.get(i).collideWith(enemies.get(j));
+                bullets.get(i).collideWith(enemies.get(j),g, this);
             }
         }
-
-        //边缘检测
-
 
         //画出主战坦克、子弹，敌军坦克
        mytank.paint(g);
@@ -80,6 +80,8 @@ public class TankFrame extends Frame {
            enemies.get(i).autofire(Group.Bad);
            enemies.get(i).paint(g);
        }
+
+       e.paint(g);
     }
 
     class MyKeyListener extends KeyAdapter{

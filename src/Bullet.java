@@ -7,6 +7,7 @@ public class Bullet {
     private int y;
     private Group group;
 
+
     private boolean live = true;
 
     public Group getGroup() {
@@ -97,13 +98,16 @@ public class Bullet {
     }
 
 
-    public void collideWith(Tank tank) {
+    public void collideWith(Tank tank, Graphics g, TankFrame tf) {
         //如果属于我方子弹，没有友方伤害，直接返回
         if(this.group == tank.getGroup()) return;
+        Explode e =new Explode(tank.getX()+ResourceMgr.Tank_WIDTH,tank.getY()+ResourceMgr.Tank_HEIGHT, tf);
 
         Rectangle rec1 = new Rectangle(x, y, ResourceMgr.BULLET_WIDTH, ResourceMgr.BULLET_HEIGHT);
         Rectangle rec2 = new Rectangle(tank.getX(), tank.getY(), ResourceMgr.Tank_WIDTH, ResourceMgr.Tank_HEIGHT);
         if (rec1.intersects(rec2)) {
+
+            e.paint(g);
             this.die();
             tank.die();
         }
