@@ -7,6 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TankFrame extends Frame {
+    int initEnemies = 5;
+
+
+
     static final int GAME_WIDTH = 800, GAME_HEIGHT=800;
     Tank mytank = new Tank(400,400,Dir.DOWN, this, Group.Good);
     List<Tank> enemies =new ArrayList<>();
@@ -28,7 +32,9 @@ public class TankFrame extends Frame {
             }});
         addKeyListener(new MyKeyListener());
 
-        for(int i=0; i<=5; i++){
+
+        initEnemies = Integer.parseInt((String) PropertyMgr.getvalue("initEnemies")) ;
+        for(int i=0; i<=initEnemies-1; i++){
             enemies.add(new Tank(100+100*i, 200, Dir.DOWN, this, Group.Bad));
             enemies.get(i).setMoving(true);
         }
