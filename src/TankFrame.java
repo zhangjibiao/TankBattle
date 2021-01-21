@@ -11,9 +11,7 @@ public class TankFrame extends Frame {
     Tank mytank = new Tank(400,400,Dir.DOWN, this, Group.Good);
     List<Tank> enemies =new ArrayList<>();
     List<Bullet> bullets = new ArrayList<>();
-    Explode e =new Explode(200,200,this);
-
-
+    List<Explode> explodes = new ArrayList<>();
 
     public TankFrame(){
 
@@ -21,7 +19,6 @@ public class TankFrame extends Frame {
         setResizable(false);
         setTitle("Tank Battle");
         setVisible(true);
-
 
         //设置窗口监听器，使窗口能被用户关闭
         addWindowListener( new WindowAdapter() { //匿名内部类
@@ -60,6 +57,7 @@ public class TankFrame extends Frame {
         g.setColor(Color.WHITE);
         g.drawString("子弹的数量:" + bullets.size(), 10, 60);
         g.drawString("敌人的数量:" + enemies.size(), 10, 100);
+        g.drawString("爆炸的数量:" + explodes.size(), 10, 140);
         g.setColor(c);
 
         //碰撞检测
@@ -69,19 +67,21 @@ public class TankFrame extends Frame {
                 bullets.get(i).collideWith(enemies.get(j),g, this);
             }
         }
+        //画出爆炸效果
+        for(int i=0; i<explodes.size();i++){
+            explodes.get(i).paint(g);
+        }
 
         //画出主战坦克、子弹，敌军坦克
-       mytank.paint(g);
+       mytank.paintmytank(g);
        for(int i=0; i<bullets.size(); i++) {
             bullets.get(i).paint(g);
         }
        for(int i=0; i<enemies.size();i++){
            enemies.get(i).autodrive();
            enemies.get(i).autofire(Group.Bad);
-           enemies.get(i).paint(g);
+           enemies.get(i).paintenemies(g);
        }
-
-       e.paint(g);
     }
 
     class MyKeyListener extends KeyAdapter{
@@ -105,6 +105,8 @@ public class TankFrame extends Frame {
 
             //根据键盘布尔值改变方向
             setdir();
+            //加入坦克移动的音效
+            //new Thread(()->new Audio("audio/tank_move.wav").play()).start();
         }
 
         //

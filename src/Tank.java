@@ -65,16 +65,39 @@ public class Tank {
         this.moving = moving;
     }
 
-    public void paint(Graphics g) {
+    public void paintenemies(Graphics g){
         //根据方向确定图片
         switch(dir){
-            case UP: g.drawImage(ResourceMgr.tankU,x,y,null);
+            case UP:
+                g.drawImage(ResourceMgr.tankU1, x, y, null);
                 break;
-            case DOWN:g.drawImage(ResourceMgr.tankD,x,y,null);
+            case DOWN:
+                g.drawImage(ResourceMgr.tankD1, x, y, null);
                 break;
-            case LEFT:g.drawImage(ResourceMgr.tankL,x,y,null);
+            case LEFT:
+                g.drawImage(ResourceMgr.tankL1, x, y, null);
                 break;
-            case RIGHT:g.drawImage(ResourceMgr.tankR,x,y,null);
+            case RIGHT:
+                g.drawImage(ResourceMgr.tankR1, x, y, null);
+                break;
+        }
+        move();
+    }
+
+    public void paintmytank(Graphics g) {
+        //根据方向确定图片
+        switch(dir){
+            case UP:
+                g.drawImage(ResourceMgr.mytankU1, x, y, null);
+                break;
+            case DOWN:
+                g.drawImage(ResourceMgr.mytankD1, x, y, null);
+                break;
+            case LEFT:
+                g.drawImage(ResourceMgr.mytankL1, x, y, null);
+                break;
+            case RIGHT:
+                g.drawImage(ResourceMgr.mytankR1, x, y, null);
                 break;
         }
         move();
@@ -108,6 +131,9 @@ public class Tank {
     public void fire(Group group) {
         tf.bullets.add(new Bullet(this.x + ResourceMgr.Tank_WIDTH/2 - ResourceMgr.BULLET_WIDTH/2,
                 this.y + ResourceMgr.Tank_HEIGHT/2 - ResourceMgr.BULLET_HEIGHT/2, this.dir, this.tf, group));
+        //TODO：内存泄漏
+        //if(this.group == Group.Good) new Thread(()->new Audio("audio/tank_fire.wav").play()).start();
+
     }
 
 
