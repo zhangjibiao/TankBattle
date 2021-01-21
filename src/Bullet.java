@@ -6,6 +6,8 @@ public class Bullet {
     private int x;
     private int y;
     private Group group;
+    Rectangle rec1 = new Rectangle();
+    Rectangle rec2 = new Rectangle();
 
 
     private boolean live = true;
@@ -93,8 +95,9 @@ public class Bullet {
                 break;
 
         }
-
         if (x < 0 || y < 0 || x > TankFrame.GAME_WIDTH || y > TankFrame.GAME_HEIGHT) live = false;
+
+        rec1.setBounds(x, y, ResourceMgr.BULLET_WIDTH, ResourceMgr.BULLET_HEIGHT);
     }
 
 
@@ -102,8 +105,7 @@ public class Bullet {
         //如果属于我方子弹，没有友方伤害，直接返回
         if(this.group == tank.getGroup()) return;
 
-        Rectangle rec1 = new Rectangle(x, y, ResourceMgr.BULLET_WIDTH, ResourceMgr.BULLET_HEIGHT);
-        Rectangle rec2 = new Rectangle(tank.getX(), tank.getY(), ResourceMgr.Tank_WIDTH, ResourceMgr.Tank_HEIGHT);
+        rec2.setBounds(tank.getX(), tank.getY(), ResourceMgr.Tank_WIDTH, ResourceMgr.Tank_HEIGHT);
         if (rec1.intersects(rec2)) {
 
             tf.explodes.add(new Explode(tank.getX()+ResourceMgr.Tank_WIDTH/2,tank.getY()+ResourceMgr.Tank_HEIGHT/2, tf));
