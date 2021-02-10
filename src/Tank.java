@@ -8,10 +8,10 @@ import java.util.Random;
 public class Tank {
     private static final int SPEED = Integer.parseInt((String)PropertyMgr.getvalue("tankSpeed"));
 
-    private int x;
-    private int y;
+    int x;
+    int y;
 
-    private Dir dir = Dir.DOWN;
+    Dir dir = Dir.DOWN;
 
     public Boolean getMoving() {
         return moving;
@@ -20,7 +20,8 @@ public class Tank {
     private Boolean moving = false;
     private TankFrame tf = null;
     private Boolean live = true;
-    private Group group ;
+    Group group ;
+    FireStrategy fs;
 
     public Group getGroup() {
         return group;
@@ -56,6 +57,10 @@ public class Tank {
         this.dir = dir;
         this.tf =tf;
         this.group = group;
+
+        if (group==Group.Bad) fs = new DefaultStrategy();
+        else fs = new FourDirStrategy();
+
     }
 
     public Boolean istMoving() {
@@ -130,8 +135,7 @@ public class Tank {
 
 
     public void fire(Group group) {
-        tf.bullets.add(new Bullet(this.x + ResourceMgr.Tank_WIDTH/2 - ResourceMgr.BULLET_WIDTH/2,
-                this.y + ResourceMgr.Tank_HEIGHT/2 - ResourceMgr.BULLET_HEIGHT/2, this.dir, this.tf, group));
+        fs.fire(tf, this);
         //TODO：内存泄漏
         //if(this.group == Group.Good) new Thread(()->new Audio("audio/tank_fire.wav").play()).start();
 
