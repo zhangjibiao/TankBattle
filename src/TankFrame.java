@@ -9,9 +9,8 @@ import java.util.List;
 public class TankFrame extends Frame {
     int initEnemies = 5;
 
-
-
-    static final int GAME_WIDTH = 800, GAME_HEIGHT=800;
+    static final int GAME_WIDTH = Integer.parseInt((String)PropertyMgr.getvalue("gameWidth"));
+    static final int GAME_HEIGHT = Integer.parseInt((String)PropertyMgr.getvalue("gameHeight"));
     Tank mytank = new Tank(400,400,Dir.DOWN, this, Group.Good);
     List<Tank> enemies =new ArrayList<>();
     List<Bullet> bullets = new ArrayList<>();
@@ -32,7 +31,7 @@ public class TankFrame extends Frame {
             }});
         addKeyListener(new MyKeyListener());
 
-
+        //画出敌军坦克
         initEnemies = Integer.parseInt((String) PropertyMgr.getvalue("initEnemies")) ;
         for(int i=0; i<=initEnemies-1; i++){
             enemies.add(new Tank(100+100*i, 200, Dir.DOWN, this, Group.Bad));

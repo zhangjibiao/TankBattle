@@ -1,7 +1,7 @@
 import java.awt.*;
 
 public class Bullet {
-    private static int SPEED = 10;
+    private static final int SPEED = Integer.parseInt((String)PropertyMgr.getvalue("bulletSpeed"));
     private static int WIDTH = 30, HEIGHT = 30;
     private int x;
     private int y;
