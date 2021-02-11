@@ -1,3 +1,3 @@
 public interface FireStrategy {
-    void fire(TankFrame tf, Tank t);
+    void fire(GameModel gm, Tank t);
 }

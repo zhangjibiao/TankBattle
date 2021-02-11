@@ -7,14 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TankFrame extends Frame {
-    int initEnemies = 5;
+    GameModel gm;
 
     static final int GAME_WIDTH = Integer.parseInt((String)PropertyMgr.getvalue("gameWidth"));
     static final int GAME_HEIGHT = Integer.parseInt((String)PropertyMgr.getvalue("gameHeight"));
-    Tank mytank = new Tank(400,400,Dir.DOWN, this, Group.Good);
-    List<Tank> enemies =new ArrayList<>();
-    List<Bullet> bullets = new ArrayList<>();
-    List<Explode> explodes = new ArrayList<>();
+
 
     public TankFrame(){
 
@@ -22,6 +19,7 @@ public class TankFrame extends Frame {
         setResizable(false);
         setTitle("Tank Battle");
         setVisible(true);
+        gm = new GameModel(this);
 
         //设置窗口监听器，使窗口能被用户关闭
         addWindowListener( new WindowAdapter() { //匿名内部类
@@ -30,13 +28,6 @@ public class TankFrame extends Frame {
                 System.exit(0);
             }});
         addKeyListener(new MyKeyListener());
-
-        //画出敌军坦克
-        initEnemies = Integer.parseInt((String) PropertyMgr.getvalue("initEnemies")) ;
-        for(int i=0; i<=initEnemies-1; i++){
-            enemies.add(new Tank(100+100*i, 200, Dir.DOWN, this, Group.Bad));
-            enemies.get(i).setMoving(true);
-        }
     }
 
     // 解决双缓存问题
@@ -57,91 +48,21 @@ public class TankFrame extends Frame {
 
     @Override
     public void paint(Graphics g) {
-        //显示子弹，敌人数量
-        Color c = g.getColor();
-        g.setColor(Color.WHITE);
-        g.drawString("子弹的数量:" + bullets.size(), 10, 60);
-        g.drawString("敌人的数量:" + enemies.size(), 10, 100);
-        g.drawString("爆炸的数量:" + explodes.size(), 10, 140);
-        g.setColor(c);
-
-        //碰撞检测
-        //Idea： 每个坦克添加bullet数组，如果是自己的bullet则无伤害
-        for(int i=0; i<bullets.size();i++){
-            for(int j=0; j<enemies.size();j++){
-                bullets.get(i).collideWith(enemies.get(j),g, this);
-            }
-        }
-        //画出爆炸效果
-        for(int i=0; i<explodes.size();i++){
-            explodes.get(i).paint(g);
-        }
-
-        //画出主战坦克、子弹，敌军坦克
-       mytank.paintmytank(g);
-       for(int i=0; i<bullets.size(); i++) {
-            bullets.get(i).paint(g);
-        }
-       for(int i=0; i<enemies.size();i++){
-           enemies.get(i).autodrive();
-           enemies.get(i).autofire(Group.Bad);
-           enemies.get(i).paintenemies(g);
-       }
+        gm.paint(g);
     }
 
     class MyKeyListener extends KeyAdapter{
-        //键盘布尔值
-        boolean BL = false;
-        boolean BR = false;
-        boolean BU = false;
-        boolean BD = false;
-
         @Override
         //根据按键方向使坦克前进
         public void keyPressed(KeyEvent e) {
             int key = e.getKeyCode(); //获取被按下的键
-            switch(key){
-                case(KeyEvent.VK_LEFT):  BL = true; break;
-                case(KeyEvent.VK_RIGHT): BR = true; break;
-                case(KeyEvent.VK_UP):  BU = true; break;
-                case(KeyEvent.VK_DOWN):  BD = true; break;
-                default:break;
-            }
-
-            //根据键盘布尔值改变方向
-            setdir();
-            //加入坦克移动的音效
-            //new Thread(()->new Audio("audio/tank_move.wav").play()).start();
+            gm.keyPressed(key);
         }
 
-        //
         @Override
         public void keyReleased(KeyEvent e) {
             int key = e.getKeyCode(); //获取被按下的键
-            switch(key){
-                case(KeyEvent.VK_LEFT):  BL = false; break;
-                case(KeyEvent.VK_RIGHT): BR = false; break;
-                case(KeyEvent.VK_UP):  BU = false; break;
-                case(KeyEvent.VK_DOWN):  BD = false; break;
-                case KeyEvent.VK_CONTROL:
-                    mytank.fire(Group.Good);
-                    break;
-                default:break;
-            }
-            //根据键盘布尔值改变方向
-            setdir();
-        }
-
-        private void setdir() {
-            if(!BU && !BD && !BL && !BR) mytank.setMoving(false);
-            else{
-                mytank.setMoving(true);
-
-                if(BU) mytank.setDir(Dir.UP);
-                if(BD) mytank.setDir(Dir.DOWN);
-                if(BR) mytank.setDir(Dir.RIGHT);
-                if(BL) mytank.setDir(Dir.LEFT);
-            }
+            gm.KeyReleased(key);
         }
     }
 }

@@ -18,7 +18,7 @@ public class Tank {
     }
 
     private Boolean moving = false;
-    private TankFrame tf = null;
+    private GameModel gm = null;
     private Boolean live = true;
     Group group ;
     FireStrategy fs;
@@ -51,11 +51,11 @@ public class Tank {
         this.dir = dir;
     }
 
-    public Tank(int x, int y, Dir dir,TankFrame tf,Group group) {
+    public Tank(int x, int y, Dir dir,GameModel gm,Group group) {
         this.x = x;
         this.y = y;
         this.dir = dir;
-        this.tf =tf;
+        this.gm =gm;
         this.group = group;
 
         if (group==Group.Bad) fs = new DefaultStrategy();
@@ -123,7 +123,7 @@ public class Tank {
                     x += SPEED;
                 break;}
             case UP:{
-                if(y > tf.getInsets().top-tf.getInsets().bottom)
+                if(y > gm.tf.getInsets().top-gm.tf.getInsets().bottom)
                     y -= SPEED;
                 break;}
             case DOWN:{
@@ -135,16 +135,15 @@ public class Tank {
 
 
     public void fire(Group group) {
-        fs.fire(tf, this);
+        fs.fire(gm, this);
         //TODO：内存泄漏
         //if(this.group == Group.Good) new Thread(()->new Audio("audio/tank_fire.wav").play()).start();
-
     }
 
 
     public void die() {
         live = false;
-        tf.enemies.remove(this);
+        gm.enemies.remove(this);
     }
 
     // 敌军坦克，自动开火
@@ -157,8 +156,6 @@ public class Tank {
                 case 3: this.dir = Dir.RIGHT; break;
             }
         }
-
-
     }
 
     public void autofire(Group group) {

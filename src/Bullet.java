@@ -20,14 +20,14 @@ public class Bullet {
         this.group = group;
     }
 
-    TankFrame tf = null; //获取其引用
+    GameModel gm = null; //获取其引用
 
-    public Bullet(int x, int y, Dir dir, TankFrame tf, Group group) {
+    public Bullet(int x, int y, Dir dir, GameModel gm, Group group) {
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.group = group;
-        this.tf = tf;
+        this.gm = gm;
     }
 
     private Dir dir;
@@ -58,7 +58,7 @@ public class Bullet {
 
     public void paint(Graphics g) {
         if (!live) {
-            tf.bullets.remove(this);
+            gm.bullets.remove(this);
         }
         switch (dir) {
             case UP:
@@ -101,14 +101,14 @@ public class Bullet {
     }
 
 
-    public void collideWith(Tank tank, Graphics g, TankFrame tf) {
+    public void collideWith(Tank tank, Graphics g, GameModel gm) {
         //如果属于我方子弹，没有友方伤害，直接返回
         if(this.group == tank.getGroup()) return;
 
         rec2.setBounds(tank.getX(), tank.getY(), ResourceMgr.Tank_WIDTH, ResourceMgr.Tank_HEIGHT);
         if (rec1.intersects(rec2)) {
 
-            tf.explodes.add(new Explode(tank.getX()+ResourceMgr.Tank_WIDTH/2,tank.getY()+ResourceMgr.Tank_HEIGHT/2, tf));
+            gm.explodes.add(new Explode(tank.getX()+ResourceMgr.Tank_WIDTH/2,tank.getY()+ResourceMgr.Tank_HEIGHT/2, gm));
             this.die();
             tank.die();
         }
