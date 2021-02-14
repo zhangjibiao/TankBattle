@@ -18,12 +18,11 @@ public class GameModel {
         return INSTANCE;
     }
 
-    static List<GameObject> go = new ArrayList();
-
     static {
         INSTANCE.init();
     }
 
+    List<GameObject> go = new ArrayList();
     public TankFrame tf = null;
     public int TfWidth, TfHeight, TfTopHeight;
     Tank mytank = null;

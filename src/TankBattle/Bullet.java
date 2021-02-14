@@ -1,80 +1,65 @@
 package TankBattle;
 
+import decorator.DecoratorChain;
+
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class Bullet extends GameObject {
     private static final int SPEED = Integer.parseInt((String)PropertyMgr.getvalue("bulletSpeed"));
-
-    {
-        WIDTH = 30;
-        HEIGHT = 30;
-    }
+    public static DecoratorChain chain = new DecoratorChain();
 
     private Group group;
-
     private boolean live = true;
+    private Dir dir;
+    public BufferedImage img;
+
+    public Bullet(int x, int y, Dir dir, Group group) { // x， y为子弹尾部中心的坐标
+        this.dir = dir;
+        this.group = group;
+        switch (dir) {
+            case UP:
+                img = ResourceMgr.bulletU;
+                WIDTH = ResourceMgr.BULLET_WIDTH;
+                HEIGHT = ResourceMgr.BULLET_HEIGHT;
+                this.x = x - WIDTH / 2;
+                this.y = y - HEIGHT;
+                break;
+            case DOWN:
+                img = ResourceMgr.bulletD;
+                WIDTH = ResourceMgr.BULLET_WIDTH;
+                HEIGHT = ResourceMgr.BULLET_HEIGHT;
+                this.x = x - WIDTH / 2;
+                this.y = y + HEIGHT;
+                break;
+            case LEFT:
+                img = ResourceMgr.bulletL;
+                WIDTH = ResourceMgr.BULLET_HEIGHT;
+                HEIGHT = ResourceMgr.BULLET_WIDTH;
+                this.x = x - WIDTH;
+                this.y = y - HEIGHT / 2;
+                break;
+            case RIGHT:
+                img = ResourceMgr.bulletR;
+                WIDTH = ResourceMgr.BULLET_HEIGHT;
+                HEIGHT = ResourceMgr.BULLET_WIDTH;
+                this.x = x + WIDTH;
+                this.y = y - HEIGHT / 2;
+                break;
+        }
+    }
 
     public Group getGroup() {
         return group;
     }
 
-    public void setGroup(Group group) {
-        this.group = group;
-    }
-
-    GameModel gm = GameModel.getInstance(); //获取其引用
-
-    public Bullet(int x, int y, Dir dir, GameModel gm, Group group) {
-        this.x = x;
-        this.y = y;
-        this.dir = dir;
-        this.group = group;
-    }
-
-    private Dir dir;
-
-    public int getX() {
-        return x;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    public Dir getDir() {
-        return dir;
-    }
-
-    public void setDir(Dir dir) {
-        this.dir = dir;
-    }
-
     public void paint(Graphics g) {
         if (!live) {
-            gm.go.remove(this);
+            GameModel.getInstance().go.remove(this);
+            return;
         }
-        switch (dir) {
-            case UP:
-                g.drawImage(ResourceMgr.bulletU, x, y, null);
-                break;
-            case DOWN:
-                g.drawImage(ResourceMgr.bulletD, x, y, null);
-                break;
-            case LEFT:
-                g.drawImage(ResourceMgr.bulletL, x, y, null);
-                break;
-            case RIGHT:
-                g.drawImage(ResourceMgr.bulletR, x, y, null);
-                break;
-        }
+        g.drawImage(img, x, y, null); // 画出子弹
+        chain.decorate(this, g); // 画出装饰
         move();
     }
 
@@ -93,9 +78,10 @@ public class Bullet extends GameObject {
                 y += SPEED;
                 break;
         }
-        if (x < 0 || y < 0 || x > TankFrame.GAME_WIDTH || y > TankFrame.GAME_HEIGHT) live = false;
+        if (x < 0 || y < 0 || x > GameModel.getInstance().TfWidth || y > GameModel.getInstance().TfHeight)
+            live = false;
 
-        rec.setBounds(x, y, ResourceMgr.BULLET_WIDTH, ResourceMgr.BULLET_HEIGHT);
+        rec.setBounds(x, y, WIDTH, HEIGHT);
     }
 
     public void die() {

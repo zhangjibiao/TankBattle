@@ -41,12 +41,13 @@ public class ResourceMgr {
             Tank_WIDTH = tankU1.getWidth();
             Tank_HEIGHT = tankU1.getHeight();
 
-            bulletD = ImageIO.read(ResourceMgr.class.getClassLoader().getResourceAsStream("images/bulletD.gif"));
-            bulletR = ImageIO.read(ResourceMgr.class.getClassLoader().getResourceAsStream("images/bulletR.gif"));
-            bulletU = ImageIO.read(ResourceMgr.class.getClassLoader().getResourceAsStream("images/bulletU.gif"));
-            bulletL = ImageIO.read(ResourceMgr.class.getClassLoader().getResourceAsStream("images/bulletL.gif"));
-            BULLET_WIDTH = bulletL.getWidth();
-            BULLET_HEIGHT = bulletL.getHeight();
+            bulletU = ImageIO.read(ResourceMgr.class.getClassLoader().getResourceAsStream("images/bulletU.png"));
+            //喜欢的图片读取不出来，是因为太小了？
+            bulletR = ImageUtil.rotateImage(bulletU, 90);
+            bulletD = ImageUtil.rotateImage(bulletU, 180);
+            bulletL = ImageUtil.rotateImage(bulletU, 270);
+            BULLET_WIDTH = bulletU.getWidth();
+            BULLET_HEIGHT = bulletU.getHeight();
 
             for(int i=0; i<16; i++){
                 Explode[i] = ImageIO.read(ResourceMgr.class.getClassLoader().getResourceAsStream("images/e"+(i+1)+".gif"));}

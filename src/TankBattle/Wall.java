@@ -12,7 +12,7 @@ public class Wall extends GameObject {
     }
 
     @Override
-    void paint(Graphics g) {
+    public void paint(Graphics g) {
         Color c = g.getColor();
         g.setColor(Color.GRAY);
         g.fillRect(x, y, WIDTH, HEIGHT);

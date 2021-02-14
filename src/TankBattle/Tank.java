@@ -144,7 +144,7 @@ public class Tank extends GameObject {
 
 
     public void fire() {
-        fs.fire(gm, this);
+        fs.fire(this);
         //TODO：内存泄漏
         //if(this.group == Group.Good) new Thread(()->new Audio("audio/tank_fire.wav").play()).start();
     }
