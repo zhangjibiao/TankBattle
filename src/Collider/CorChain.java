@@ -10,7 +10,8 @@ public class CorChain implements Collider {
     {
         add(new TankTankCor());
         add(new TankBulletCor());
-
+        add(new TankWallCor());
+        add(new WallBulletCor());
     }
 
     public void CorChain() {

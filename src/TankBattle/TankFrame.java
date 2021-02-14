@@ -21,6 +21,9 @@ public class TankFrame extends Frame {
         setTitle("Tank Battle");
         setVisible(true);
         gm.tf = this;
+        gm.TfWidth = GAME_WIDTH;
+        gm.TfHeight = GAME_HEIGHT;
+        gm.TfTopHeight = getInsets().top;
 
         //设置窗口监听器，使窗口能被用户关闭
         addWindowListener(new WindowAdapter() { //匿名内部类

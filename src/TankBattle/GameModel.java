@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class GameModel {
     public static final GameModel INSTANCE = new GameModel();
@@ -24,6 +25,7 @@ public class GameModel {
     }
 
     public TankFrame tf = null;
+    public int TfWidth, TfHeight, TfTopHeight;
     Tank mytank = null;
     int initEnemies = 5;
     //键盘布尔值
@@ -34,13 +36,43 @@ public class GameModel {
     public CorChain corchain = new CorChain();
 
     private void init() {
+        //画出我军坦克
         mytank = new Tank(400, 400, Group.Good);
         go.add(mytank);
+
+        //画出墙
+        go.add(new Wall(0, 200, 300, 60));
+        go.add(new Wall(240, 260, 60, 200));
+        go.add(new Wall(600, 30, 60, 150));
+
         //画出敌军坦克
+        addEnemies();
+    }
+
+    private void addEnemies() {
         initEnemies = Integer.parseInt((String) PropertyMgr.getvalue("initEnemies")) ;
+        Random r = new Random();
+        Tank t;
         for(int i = 0; i<=initEnemies-1; i++) {
-            go.add(new Tank(100 + 100 * i, 200, Group.Bad));
+            t = new Tank(
+                    r.nextInt(Integer.parseInt((String) PropertyMgr.getvalue("gameWidth")) - mytank.WIDTH),
+                    r.nextInt(Integer.parseInt((String) PropertyMgr.getvalue("gameHeight")) - mytank.HEIGHT),
+                    Group.Bad);
+            if (checkTank(t)) go.add(t);
+            else i--;
         }
+    }
+
+    //检测坦克t1是否与现有的坦克、墙冲突
+    private boolean checkTank(Tank t) {
+        GameObject o;
+        for (int i = 0; i < go.size(); i++) {
+            o = go.get(i);
+            if (o instanceof Tank || o instanceof Wall) {
+                if (t.rec.intersects(o.rec)) return false;
+            }
+        }
+        return true;
     }
 
     public void paint(Graphics g) {

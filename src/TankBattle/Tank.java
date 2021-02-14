@@ -128,15 +128,15 @@ public class Tank extends GameObject {
                     x -= SPEED;
                 break;}
             case RIGHT:{
-                if (x < TankFrame.GAME_WIDTH - WIDTH)
+                if (x < gm.TfWidth - WIDTH)
                     x += SPEED;
                 break;}
             case UP:{
-                if (y > gm.tf.getInsets().top)
+                if (y > gm.TfTopHeight)
                     y -= SPEED;
                 break;}
             case DOWN:{
-                if (y < TankFrame.GAME_HEIGHT - HEIGHT)
+                if (y < gm.TfHeight - HEIGHT)
                     y += SPEED;
                 break;}
         }
