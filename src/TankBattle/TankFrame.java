@@ -1,13 +1,14 @@
+package TankBattle;
+
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
-import java.util.List;
 
 public class TankFrame extends Frame {
-    GameModel gm;
+    GameModel gm = GameModel.getInstance();
+
 
     static final int GAME_WIDTH = Integer.parseInt((String)PropertyMgr.getvalue("gameWidth"));
     static final int GAME_HEIGHT = Integer.parseInt((String)PropertyMgr.getvalue("gameHeight"));
@@ -19,10 +20,10 @@ public class TankFrame extends Frame {
         setResizable(false);
         setTitle("Tank Battle");
         setVisible(true);
-        gm = new GameModel(this);
+        gm.tf = this;
 
         //设置窗口监听器，使窗口能被用户关闭
-        addWindowListener( new WindowAdapter() { //匿名内部类
+        addWindowListener(new WindowAdapter() { //匿名内部类
             @Override
             public void windowClosing(WindowEvent e) {
                 System.exit(0);
@@ -32,6 +33,7 @@ public class TankFrame extends Frame {
 
     // 解决双缓存问题
     Image offScreenImage = null; //定义一个Image
+
     @Override
     public void update(Graphics g) {    //调用repaint方法时，会先调用update
         if(offScreenImage == null) {

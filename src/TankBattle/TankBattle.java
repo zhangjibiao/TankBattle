@@ -1,6 +1,4 @@
-import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;//awt 基本没用
+package TankBattle;
 
 //Ctrl 开火，方向键控制方向
 

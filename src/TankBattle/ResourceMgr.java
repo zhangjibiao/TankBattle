@@ -1,3 +1,5 @@
+package TankBattle;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -50,10 +52,9 @@ public class ResourceMgr {
                 Explode[i] = ImageIO.read(ResourceMgr.class.getClassLoader().getResourceAsStream("images/e"+(i+1)+".gif"));}
             Explode_WIDTH = Explode[0].getWidth();
             Explode_HEIGHT = Explode[0].getHeight();
-        }
-        catch (IOException e){
+        } catch (IOException e){
             e.printStackTrace();
         }
 
 
-}}
+    }}

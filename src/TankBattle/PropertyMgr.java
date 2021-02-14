@@ -1,5 +1,5 @@
-import java.io.File;
-import java.io.FileInputStream;
+package TankBattle;
+
 import java.io.IOException;
 import java.util.Properties;
 
@@ -8,7 +8,7 @@ public class PropertyMgr {
 
     static{
         try {
-            p.load(PropertyMgr.class.getClassLoader().getResourceAsStream("config"));
+            p.load(PropertyMgr.class.getClassLoader().getResourceAsStream("TankBattle/config"));
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -1,10 +1,7 @@
-import java.io.IOException;
+package TankBattle;
 
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.DataLine;
-import javax.sound.sampled.SourceDataLine;
+import javax.sound.sampled.*;
+import java.io.IOException;
 
 public class Audio {
 
@@ -61,7 +58,7 @@ public class Audio {
             sourceDataLine.open(audioFormat, 1024*5);
             sourceDataLine.start();
             //System.out.println(audioInputStream.markSupported());
-             audioInputStream.mark(12358946);
+            audioInputStream.mark(12358946);
             while ((len = audioInputStream.read(b)) > 0) {
                 sourceDataLine.write(b, 0, len);
             }
@@ -74,7 +71,6 @@ public class Audio {
             e.printStackTrace();
         }
     }
-
 
 
     public void close() {

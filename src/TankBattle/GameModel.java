@@ -1,72 +1,72 @@
+package TankBattle;
+
+import Collider.CorChain;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameModel {
+    public static final GameModel INSTANCE = new GameModel();
+
+    private GameModel() {
+    }
+
+    public static GameModel getInstance() {
+        return INSTANCE;
+    }
+
+    static List<GameObject> go = new ArrayList();
+
+    static {
+        INSTANCE.init();
+    }
+
+    public TankFrame tf = null;
+    Tank mytank = null;
     int initEnemies = 5;
     //键盘布尔值
     boolean BL = false;
     boolean BR = false;
     boolean BU = false;
     boolean BD = false;
+    public CorChain corchain = new CorChain();
 
-    Tank mytank = new Tank(400,400,Dir.DOWN, this, Group.Good);
-    List<Tank> enemies =new ArrayList<>();
-    List<Bullet> bullets = new ArrayList<>();
-    List<Explode> explodes = new ArrayList<>();
-    TankFrame tf = null;
-
-    {
+    private void init() {
+        mytank = new Tank(400, 400, Group.Good);
+        go.add(mytank);
         //画出敌军坦克
         initEnemies = Integer.parseInt((String) PropertyMgr.getvalue("initEnemies")) ;
-        for(int i=0; i<=initEnemies-1; i++)
-        {
-            enemies.add(new Tank(100 + 100 * i, 200, Dir.DOWN, this, Group.Bad));
-            enemies.get(i).setMoving(true);
+        for(int i = 0; i<=initEnemies-1; i++) {
+            go.add(new Tank(100 + 100 * i, 200, Group.Bad));
         }
-    }
-
-    public GameModel(TankFrame tf) {
-        this.tf = tf;
     }
 
     public void paint(Graphics g) {
         //显示子弹，敌人数量
         Color c = g.getColor();
         g.setColor(Color.WHITE);
-        g.drawString("子弹的数量:" + bullets.size(), 10, 60);
-        g.drawString("敌人的数量:" + enemies.size(), 10, 100);
-        g.drawString("爆炸的数量:" + explodes.size(), 10, 140);
+//        g.drawString("子弹的数量:" + bullets.size(), 10, 60);
+//        g.drawString("敌人的数量:" + enemies.size(), 10, 100);
+//        g.drawString("爆炸的数量:" + explodes.size(), 10, 140);
         g.setColor(c);
 
         //碰撞检测
         //Idea： 每个坦克添加bullet数组，如果是自己的bullet则无伤害
-        for(int i=0; i<bullets.size();i++){
-            for(int j=0; j<enemies.size();j++){
-                bullets.get(i).collideWith(enemies.get(j),g, this);
+        for (int i = 0; i < go.size(); i++) {
+            for (int j = i + 1; j < go.size(); j++) {
+                //碰撞检测
+                GameObject o1 = go.get(i);
+                GameObject o2 = go.get(j);
+                corchain.collide(o1, o2);
             }
-        }
-        //画出爆炸效果
-        for(int i=0; i<explodes.size();i++){
-            explodes.get(i).paint(g);
+            //画出每一个物体
+            go.get(i).paint(g);
         }
 
-        //画出主战坦克、子弹，敌军坦克
-        mytank.paintmytank(g);
-        for(int i=0; i<bullets.size(); i++) {
-            bullets.get(i).paint(g);
-        }
-        for(int i=0; i<enemies.size();i++){
-            enemies.get(i).autodrive();
-            enemies.get(i).autofire(Group.Bad);
-            enemies.get(i).paintenemies(g);
-        }
     }
 
-    public Tank getmytank() {
-            return mytank;
-    }
 
     public void KeyReleased(int key) {
         switch(key){
@@ -75,7 +75,7 @@ public class GameModel {
             case(KeyEvent.VK_UP):  BU = false; break;
             case(KeyEvent.VK_DOWN):  BD = false; break;
             case KeyEvent.VK_CONTROL:
-                mytank.fire(Group.Good);
+                if (mytank.live == true) mytank.fire();
                 break;
             default:break;
         }
