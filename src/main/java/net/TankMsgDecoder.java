@@ -13,11 +13,11 @@ public class TankMsgDecoder extends ByteToMessageDecoder {
 
 
     @Override
-    //inÊÇdecoderµÄÊäÈë£¬out·ÅÊä³öµÄlist
+    //inï¿½ï¿½decoderï¿½ï¿½ï¿½ï¿½ï¿½ë£¬outï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½list
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
-        if (in.readableBytes() < 33) return; //ÅĞ¶ÏĞÅÏ¢ÓĞÃ»ÓĞÍêÕû´«Íê£¬TCPÕ³°ü
+        if (in.readableBytes() < 33) return; //ï¿½Ğ¶ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê£¬TCPÕ³ï¿½ï¿½
 
-        TankMsg msg = new TankMsg();
+        TankJoinMsg msg = new TankJoinMsg();
         msg.x = in.readInt();
         msg.y = in.readInt();
         msg.dir = Dir.values()[in.readInt()];

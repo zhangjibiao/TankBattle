@@ -1,8 +1,6 @@
 package net;
 
-import TankBattle.Dir;
 import TankBattle.GameModel;
-import TankBattle.Group;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -10,8 +8,6 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-
-import java.util.UUID;
 
 
 public class Client {
@@ -56,7 +52,7 @@ public class Client {
         }
     }
 
-    public void send(TankMsg msg) {
+    public void send(TankJoinMsg msg) {
         ByteBuf buf = Unpooled.copiedBuffer(msg.toBytes());
         channel.writeAndFlush(buf);//写出去并且释放buf的引用,实际上可以传object？
     }
@@ -84,7 +80,9 @@ class ClientHandler extends ChannelInboundHandlerAdapter {
         //拷贝一份
 //        ByteBuf buf = Unpooled.copiedBuffer("Hello".getBytes());
 //        ctx.writeAndFlush(buf);//写出去并且释放buf的引用
-        ctx.writeAndFlush(new TankMsg(10, 20, Dir.UP, false, Group.Bad, UUID.randomUUID(), false));
+        ctx.writeAndFlush(new TankJoinMsg(GameModel.getInstance().mytank));
+//        ctx.writeAndFlush(new TankJoinMsg(10, 20, Dir.UP, false, Group.Bad, UUID.randomUUID(), false));
+
     }
 
     @Override
@@ -103,7 +101,7 @@ class ClientHandler extends ChannelInboundHandlerAdapter {
 //            if(buf != null) ReferenceCountUtil.release(buf);//释放buf
 //        }
         System.out.println(msg);
-        GameModel.getInstance().update((TankMsg) msg);
+        GameModel.getInstance().newTankJoin((TankJoinMsg) msg);
 
 
     }

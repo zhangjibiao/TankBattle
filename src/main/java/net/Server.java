@@ -9,6 +9,8 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.util.concurrent.GlobalEventExecutor;
 
+import java.util.Iterator;
+
 public class Server {
     //用channel组处理所有的channel上的事件，用默认的线程
     public static ChannelGroup clients = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
@@ -28,10 +30,11 @@ public class Server {
                         protected void initChannel(SocketChannel ch) throws Exception {
                             ChannelPipeline pl = ch.pipeline();
                             //给处理的责任链加上自己的handler
-                            pl
+                            pl.addLast(new TankMsgDecoder())  //服务端先decode再处理
+                                    .addLast(new TankMsgEncoder())
                                     .addLast(new ServerChildHandler());
 
-                            //addLast(new TankMsgDecoder())  //服务端先decode再处理
+
                         }
                     })
                     .bind(8888)
@@ -79,11 +82,20 @@ class ServerChildHandler extends ChannelInboundHandlerAdapter {
 //            Server.clients.writeAndFlush(msg);
 //            ServerFrame.INSTANCE.updateServerMsg(s);
 //        }
-
-        Server.clients.writeAndFlush(msg);
+//        Server.clients.writeAndFlush(msg);
+        Iterator<Channel> it = Server.clients.iterator();
+        Channel c;
+        while (it.hasNext()) {
+            c = it.next();
+            if (c != ctx.channel())
+                c.writeAndFlush(msg);
+        }
         ServerFrame.INSTANCE.updateServerMsg(
-                ((TankMsg) msg)
+                ((TankJoinMsg) msg)
                         .toString());
+        System.out.println("heool");
+        System.out.println(((TankJoinMsg) msg)
+                .toString());
 
     }
 }
