@@ -14,14 +14,16 @@ public class TankMsg {
     public boolean moving;
     public Group group;
     public UUID id;
+    public boolean live;
 
-    public TankMsg(int x, int y, Dir dir, boolean moving, Group group, UUID id) {
+    public TankMsg(int x, int y, Dir dir, boolean moving, Group group, UUID id, boolean live) {
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.moving = moving;
         this.group = group;
         this.id = id;
+        this.live = live;
     }
 
     public TankMsg() {
@@ -36,8 +38,9 @@ public class TankMsg {
         builder.append(this.getClass().getName())
                 .append(":[")
                 .append("UUiD=" + this.id + "   ")
-                .append(this.x + "," + this.y + "   " + this.dir)
-                .append("   " + this.group)
+                .append("x=" + this.x + " y=" + this.y + "  dir=" + this.dir)
+                .append("   group=" + this.group)
+                .append("live=" + this.live)
                 .append("]");
         return builder.toString();
     }
@@ -56,6 +59,7 @@ public class TankMsg {
             dos.writeInt(group.ordinal());
             dos.writeLong(id.getMostSignificantBits());
             dos.writeLong(id.getLeastSignificantBits());
+            dos.writeBoolean(live);
             dos.flush();
             bytes = baos.toByteArray();
         } catch (IOException e) {

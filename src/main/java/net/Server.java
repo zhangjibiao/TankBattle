@@ -81,6 +81,9 @@ class ServerChildHandler extends ChannelInboundHandlerAdapter {
 //        }
 
         Server.clients.writeAndFlush(msg);
+        ServerFrame.INSTANCE.updateServerMsg(
+                ((TankMsg) msg)
+                        .toString());
 
     }
 }

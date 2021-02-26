@@ -24,6 +24,7 @@ public class TankMsgDecoder extends ByteToMessageDecoder {
         msg.moving = in.readBoolean();
         msg.group = Group.values()[in.readInt()];
         msg.id = new UUID(in.readLong(), in.readLong());
+        msg.live = in.readBoolean();
         out.add(msg);
     }
 }
