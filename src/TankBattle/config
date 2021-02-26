@@ -1,6 +1,0 @@
-# enemies qualifications at initialization
-initEnemies=10
-tankSpeed=10
-bulletSpeed=20
-gameWidth=1080
-gameHeight=720
