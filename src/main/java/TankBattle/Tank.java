@@ -1,6 +1,6 @@
 package TankBattle;
 
-import net.TankJoinMsg;
+import net.Msg.TankJoinMsg;
 
 import java.awt.*;
 import java.util.Random;

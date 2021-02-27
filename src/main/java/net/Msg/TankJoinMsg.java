@@ -1,13 +1,12 @@
-package net;
+package net.Msg;
 
 import TankBattle.Dir;
 import TankBattle.GameModel;
 import TankBattle.Group;
 import TankBattle.Tank;
+import net.Client;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.UUID;
 
 public class TankJoinMsg extends Msg {
@@ -26,12 +25,12 @@ public class TankJoinMsg extends Msg {
         this.group = group;
         this.id = id;
         this.live = live;
+        super.msgType = MsgType.TankJoinMsg;
     }
 
     public TankJoinMsg() {
+        super.msgType = MsgType.TankJoinMsg;
     }
-
-    ;
 
     public TankJoinMsg(Tank tank) {
         x = tank.x;
@@ -41,9 +40,46 @@ public class TankJoinMsg extends Msg {
         group = tank.getGroup();
         live = tank.live;
         id = tank.id;
+        super.msgType = MsgType.TankJoinMsg;
     }
 
+    //通过bytes给自己的属性赋值
+    @Override
+    public void parse(byte[] bytes) {
+        ByteArrayInputStream bais = null;
+        DataInputStream dis = null;
 
+        try {
+            bais = new ByteArrayInputStream(bytes);
+            dis = new DataInputStream(bais);
+
+            x = dis.readInt();
+            y = dis.readInt();
+
+            dir = Dir.values()[dis.readInt()];
+            moving = dis.readBoolean();
+            group = Group.values()[dis.readInt()];
+            id = new UUID(dis.readLong(), dis.readLong());
+            live = dis.readBoolean();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (dis != null)
+                try {
+                    dis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            if (bais != null)
+                try {
+                    bais.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+        }
+    }
 
     @Override
     public String toString() {
@@ -53,7 +89,7 @@ public class TankJoinMsg extends Msg {
                 .append("UUiD=" + this.id + "   ")
                 .append("x=" + this.x + " y=" + this.y + "  dir=" + this.dir)
                 .append("   group=" + this.group)
-                .append("live=" + this.live)
+                .append("  live=" + this.live)
                 .append("]");
         return builder.toString();
     }
@@ -66,6 +102,8 @@ public class TankJoinMsg extends Msg {
         try {
             baos = new ByteArrayOutputStream();
             dos = new DataOutputStream(baos);
+            dos.writeInt(msgType.ordinal());
+            dos.writeInt(34);
             dos.writeInt(x);
             dos.writeInt(y);
             dos.writeInt(dir.ordinal());

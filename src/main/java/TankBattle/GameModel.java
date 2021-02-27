@@ -2,7 +2,7 @@ package TankBattle;
 
 import Collider.CorChain;
 import net.Client;
-import net.TankJoinMsg;
+import net.Msg.TankJoinMsg;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;

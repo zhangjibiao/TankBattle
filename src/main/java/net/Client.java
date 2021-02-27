@@ -8,11 +8,15 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import net.Msg.Msg;
+import net.Msg.TankJoinMsg;
+import net.Msg.TankMsgDecoder;
+import net.Msg.TankMsgEncoder;
 
 
 public class Client {
     public static final Client INSTANCE = new Client();
-    Channel channel;
+    public Channel channel;
 
     private Client() {
     }
@@ -101,8 +105,7 @@ class ClientHandler extends ChannelInboundHandlerAdapter {
 //        }finally {
 //            if(buf != null) ReferenceCountUtil.release(buf);//释放buf
 //        }
-        TankJoinMsg tankJoinMsg = (TankJoinMsg) msg;
-        tankJoinMsg.handle();
+        ((Msg) msg).handle();
     }
 
 }
