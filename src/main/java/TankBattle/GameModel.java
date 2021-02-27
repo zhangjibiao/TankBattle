@@ -4,6 +4,7 @@ import Collider.CorChain;
 import net.Client;
 import net.Msg.TankJoinMsg;
 import net.Msg.TankStartMoveMsg;
+import net.Msg.TankStopMsg;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -146,7 +147,10 @@ public class GameModel {
     }
 
     private void setdir() {
-        if (!BU && !BD && !BL && !BR) mytank.setMoving(false);
+        if (!BU && !BD && !BL && !BR) {
+            mytank.setMoving(false);
+            Client.INSTANCE.send(new TankStopMsg(mytank));
+        }
         else {
             mytank.setMoving(true);
 
