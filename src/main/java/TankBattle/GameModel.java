@@ -33,7 +33,6 @@ public class GameModel {
     public int TfHeight = Integer.parseInt((String) PropertyMgr.getValue("gameHeight"));
     public int TfTopHeight;
     public Tank mytank = null;
-    Client client = null;
     int initEnemies = 5;
     //键盘布尔值
     boolean BL = false;
@@ -57,8 +56,7 @@ public class GameModel {
         //画出敌军坦克
 //        addEnemies()
         new Thread(() -> {
-            client = new Client();
-            client.connect();
+            Client.INSTANCE.connect();
         }).start();
     }
 

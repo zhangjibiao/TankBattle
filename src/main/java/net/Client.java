@@ -11,9 +11,10 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 
 
 public class Client {
+    public static final Client INSTANCE = new Client();
     Channel channel;
 
-    public Client() {
+    private Client() {
     }
 
     public void connect() {
@@ -101,14 +102,7 @@ class ClientHandler extends ChannelInboundHandlerAdapter {
 //            if(buf != null) ReferenceCountUtil.release(buf);//释放buf
 //        }
         TankJoinMsg tankJoinMsg = (TankJoinMsg) msg;
-        if (GameModel.getInstance().findByUUID(tankJoinMsg.id) != null) return;
-        else {
-            System.out.println(tankJoinMsg);
-            GameModel.getInstance().newTankJoin(tankJoinMsg);
-
-            //让后加入的坦克能够看到自己
-            ctx.writeAndFlush(new TankJoinMsg(GameModel.getInstance().mytank));
-        }
+        tankJoinMsg.handle();
     }
 
 }

@@ -1,6 +1,7 @@
 package net;
 
 import TankBattle.Dir;
+import TankBattle.GameModel;
 import TankBattle.Group;
 import TankBattle.Tank;
 
@@ -9,7 +10,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.UUID;
 
-public class TankJoinMsg {
+public class TankJoinMsg extends Msg {
     public int x, y;
     public Dir dir;
     public boolean moving;
@@ -57,6 +58,7 @@ public class TankJoinMsg {
         return builder.toString();
     }
 
+    @Override
     public byte[] toBytes() {
         ByteArrayOutputStream baos = null;
         DataOutputStream dos = null;
@@ -91,6 +93,18 @@ public class TankJoinMsg {
         }
 
         return bytes;
+    }
+
+    @Override
+    public void handle() {
+        if (GameModel.getInstance().findByUUID(id) != null) return;
+        else {
+            System.out.println(this);
+            GameModel.getInstance().newTankJoin(this);
+
+            //让后加入的坦克能够看到自己
+            Client.INSTANCE.channel.writeAndFlush(new TankJoinMsg(GameModel.getInstance().mytank));
+        }
     }
 
 
