@@ -10,8 +10,8 @@ public class TankFrame extends Frame {
     GameModel gm = GameModel.getInstance();
 
 
-    static final int GAME_WIDTH = Integer.parseInt((String)PropertyMgr.getvalue("gameWidth"));
-    static final int GAME_HEIGHT = Integer.parseInt((String)PropertyMgr.getvalue("gameHeight"));
+    static final int GAME_WIDTH = Integer.parseInt((String) PropertyMgr.getValue("gameWidth"));
+    static final int GAME_HEIGHT = Integer.parseInt((String) PropertyMgr.getValue("gameHeight"));
 
 
     public TankFrame(){

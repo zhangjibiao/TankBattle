@@ -4,6 +4,7 @@ import net.TankJoinMsg;
 
 import java.awt.*;
 import java.util.Random;
+import java.util.UUID;
 
 public class Tank extends GameObject {
     private static final int SPEED = Integer.parseInt((String) PropertyMgr.getValue("tankSpeed"));
@@ -15,6 +16,7 @@ public class Tank extends GameObject {
     public boolean live = true;
     Group group;
     FireStrategy fs;
+
 
     {
         WIDTH = ResourceMgr.Tank_WIDTH;
@@ -41,6 +43,7 @@ public class Tank extends GameObject {
         oldX = msg.x;
         oldY = msg.y;
         this.group = msg.group;
+        this.id = msg.id;
 
         if (group == Group.Bad) fs = new DefaultStrategy();
         else fs = new FourDirStrategy();
@@ -50,6 +53,10 @@ public class Tank extends GameObject {
         this.dir = msg.dir;
         this.moving = msg.moving;
         this.live = msg.live;
+    }
+
+    public UUID getId() {
+        return id;
     }
 
     public Boolean getMoving() {
@@ -93,6 +100,12 @@ public class Tank extends GameObject {
     }
 
     public void paint(Graphics g) {
+        //在坦克上方显示UUID
+        Color c = g.getColor();
+        g.setColor(Color.YELLOW);
+        g.drawString(id.toString(), x, y - 10);
+        g.setColor(c);
+
         if (group == Group.Good) {
             switch (dir) {
                 case UP:

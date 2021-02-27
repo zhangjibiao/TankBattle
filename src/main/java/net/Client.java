@@ -100,10 +100,15 @@ class ClientHandler extends ChannelInboundHandlerAdapter {
 //        }finally {
 //            if(buf != null) ReferenceCountUtil.release(buf);//释放buf
 //        }
-        System.out.println(msg);
-        GameModel.getInstance().newTankJoin((TankJoinMsg) msg);
+        TankJoinMsg tankJoinMsg = (TankJoinMsg) msg;
+        if (GameModel.getInstance().findByUUID(tankJoinMsg.id) != null) return;
+        else {
+            System.out.println(tankJoinMsg);
+            GameModel.getInstance().newTankJoin(tankJoinMsg);
 
-
+            //让后加入的坦克能够看到自己
+            ctx.writeAndFlush(new TankJoinMsg(GameModel.getInstance().mytank));
+        }
     }
 
 }

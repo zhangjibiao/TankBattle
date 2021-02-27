@@ -6,9 +6,10 @@ import net.TankJoinMsg;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
+import java.util.UUID;
 
 public class GameModel {
     public static final GameModel INSTANCE = new GameModel();
@@ -20,11 +21,13 @@ public class GameModel {
         return INSTANCE;
     }
 
+    static Map<UUID, GameObject> go = new HashMap<>();
+
     static {
         INSTANCE.init();
     }
 
-    List<GameObject> go = new ArrayList();
+
     public TankFrame tf = null;
     public int TfWidth = Integer.parseInt((String) PropertyMgr.getValue("gameWidth"));
     public int TfHeight = Integer.parseInt((String) PropertyMgr.getValue("gameHeight"));
@@ -44,12 +47,12 @@ public class GameModel {
 //        mytank = new Tank(400, 400, Group.Good);
         Random r = new Random();
         mytank = new Tank(r.nextInt(TfWidth), r.nextInt(TfHeight), Group.Good, Dir.UP);
-        go.add(mytank);
+        addGo(mytank);
 
         //画出墙
-        go.add(new Wall(0, 200, 300, 60));
-        go.add(new Wall(240, 260, 60, 200));
-        go.add(new Wall(600, 30, 60, 150));
+        addGo(new Wall(0, 200, 300, 60));
+        addGo(new Wall(240, 260, 60, 200));
+        addGo(new Wall(600, 30, 60, 150));
 
         //画出敌军坦克
 //        addEnemies()
@@ -57,9 +60,10 @@ public class GameModel {
             client = new Client();
             client.connect();
         }).start();
+    }
 
-        ;
-
+    void addGo(GameObject o) {
+        go.put(o.id, o);
     }
 
     private void addEnemies() {
@@ -72,12 +76,13 @@ public class GameModel {
                     r.nextInt(Integer.parseInt((String) PropertyMgr.getValue("gameHeight")) - mytank.HEIGHT),
                     Group.Bad,
                     Dir.DOWN);
-            if (checkTank(t)) go.add(t);
+            if (checkTank(t)) addGo(t);
             else i--;
         }
     }
 
     //检测坦克t1是否与现有的坦克、墙冲突
+    //TODO: change to iterator, include other collider
     private boolean checkTank(Tank t) {
         GameObject o;
         for (int i = 0; i < go.size(); i++) {
@@ -100,17 +105,19 @@ public class GameModel {
 
         //碰撞检测
         //Idea： 每个坦克添加bullet数组，如果是自己的bullet则无伤害
-        for (int i = 0; i < go.size(); i++) {
-            for (int j = i + 1; j < go.size(); j++) {
+        Object[] ids = go.keySet().toArray();
+        Object[] id = go.keySet().toArray();
+
+        for (int i = 0; i < ids.length; i++) {
+            for (int j = i + 1; j < ids.length; j++) {
                 //碰撞检测
-                GameObject o1 = go.get(i);
-                GameObject o2 = go.get(j);
+                GameObject o1 = go.get(ids[i]);
+                GameObject o2 = go.get(ids[j]);
                 corchain.collide(o1, o2);
             }
             //画出每一个物体
-            go.get(i).paint(g);
+            go.get(ids[i]).paint(g);
         }
-
     }
 
 
@@ -176,6 +183,19 @@ public class GameModel {
     }
 
     public void newTankJoin(TankJoinMsg msg) {
-        go.add(new Tank(msg));
+        addGo(new Tank(msg));
+    }
+
+    public GameObject findByUUID(UUID id) {
+        return go.get(id);
+        /*GameObject o;
+        Iterator<GameObject> it = go.iterator();
+        while (it.hasNext()) {
+            o = it.next();
+            if (o instanceof Tank && ((Tank) o).id.equals(id) ) {
+                return (Tank) o;
+            }
+        }
+        return null;*/
     }
 }

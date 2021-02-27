@@ -39,7 +39,7 @@ public class TankJoinMsg {
         moving = tank.getMoving();
         group = tank.getGroup();
         live = tank.live;
-        id = UUID.randomUUID();
+        id = tank.id;
     }
 
 

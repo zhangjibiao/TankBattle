@@ -93,7 +93,6 @@ class ServerChildHandler extends ChannelInboundHandlerAdapter {
         ServerFrame.INSTANCE.updateServerMsg(
                 ((TankJoinMsg) msg)
                         .toString());
-        System.out.println("heool");
         System.out.println(((TankJoinMsg) msg)
                 .toString());
 

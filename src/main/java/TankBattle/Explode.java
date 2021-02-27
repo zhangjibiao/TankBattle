@@ -15,7 +15,7 @@ public class Explode extends GameObject {
         //根据爆炸坐标计算图片左上角坐标
         this.x = x - WIDTH / 2;
         this.y = y - HEIGHT / 2;
-        gm.go.add(this);
+        gm.addGo(this);
     }
 
     public void paint(Graphics g) {
