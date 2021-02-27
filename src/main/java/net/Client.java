@@ -2,8 +2,6 @@ package net;
 
 import TankBattle.GameModel;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
@@ -57,9 +55,9 @@ public class Client {
         }
     }
 
-    public void send(TankJoinMsg msg) {
-        ByteBuf buf = Unpooled.copiedBuffer(msg.toBytes());
-        channel.writeAndFlush(buf);//写出去并且释放buf的引用,实际上可以传object？
+    public void send(Msg msg) {
+//        ByteBuf buf = Unpooled.copiedBuffer(msg.toBytes());
+        channel.writeAndFlush(msg);//写出去并且释放buf的引用,实际上可以传object？
     }
 
     public void closeConnect() {

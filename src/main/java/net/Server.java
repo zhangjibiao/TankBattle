@@ -8,7 +8,6 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.util.concurrent.GlobalEventExecutor;
-import net.Msg.TankJoinMsg;
 import net.Msg.TankMsgDecoder;
 import net.Msg.TankMsgEncoder;
 
@@ -17,6 +16,10 @@ import java.util.Iterator;
 public class Server {
     //用channel组处理所有的channel上的事件，用默认的线程
     public static ChannelGroup clients = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
+
+    public static void main(String[] args) {
+        new Server().serverStart();
+    }
 
     public void serverStart() {
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);//作accept作用
@@ -43,7 +46,8 @@ public class Server {
                     .bind(8888)
                     .sync();
 
-            ServerFrame.INSTANCE.updateServerMsg("<Server start!>");
+            System.out.println("<Server start!>");
+
             f.channel().closeFuture().sync();//关门的服务员
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -93,11 +97,7 @@ class ServerChildHandler extends ChannelInboundHandlerAdapter {
             if (c != ctx.channel())
                 c.writeAndFlush(msg);
         }
-        ServerFrame.INSTANCE.updateServerMsg(
-                ((TankJoinMsg) msg)
-                        .toString());
-        System.out.println(((TankJoinMsg) msg)
-                .toString());
+        System.out.println(msg.toString());
 
     }
 }

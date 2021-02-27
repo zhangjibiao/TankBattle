@@ -3,11 +3,8 @@ package net.Msg;
 import TankBattle.Dir;
 import TankBattle.GameModel;
 import TankBattle.Tank;
-import net.Client;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.UUID;
 
 public class TankStartMoveMsg extends Msg {
@@ -20,9 +17,11 @@ public class TankStartMoveMsg extends Msg {
         this.y = y;
         this.dir = dir;
         this.id = id;
+        super.msgType = MsgType.TankStartMoveMsg;
     }
 
     public TankStartMoveMsg() {
+        super.msgType = MsgType.TankStartMoveMsg;
     }
 
     public TankStartMoveMsg(Tank tank) {
@@ -30,16 +29,19 @@ public class TankStartMoveMsg extends Msg {
         y = tank.y;
         dir = tank.getDir();
         id = tank.id;
+        super.msgType = MsgType.TankStartMoveMsg;
     }
 
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append(this.getClass().getName())
-                .append(":[")
-                .append("UUiD=" + this.id + "   ")
-                .append("x=" + this.x + " y=" + this.y + "  dir=" + this.dir)
-                .append("]");
+        builder.append("\n")
+                .append("<" + msgType + ">")
+                .append("\n")
+                .append("UUiD=" + this.id.getLeastSignificantBits())
+                .append("\tx=" + this.x)
+                .append("\ty=" + this.y)
+                .append("\tdir=" + this.dir);
         return builder.toString();
     }
 
@@ -51,6 +53,8 @@ public class TankStartMoveMsg extends Msg {
         try {
             baos = new ByteArrayOutputStream();
             dos = new DataOutputStream(baos);
+            dos.writeInt(msgType.ordinal());
+            dos.writeInt(28);
             dos.writeInt(x);
             dos.writeInt(y);
             dos.writeInt(dir.ordinal());
@@ -79,19 +83,49 @@ public class TankStartMoveMsg extends Msg {
 
     @Override
     public void handle() {
-        if (GameModel.getInstance().findByUUID(id) != null) return;
-        else {
-            System.out.println(this);
-//            GameModel.getInstance().newTankJoin(this);
+        updateTank();
+    }
 
-            //让后加入的坦克能够看到自己
-            Client.INSTANCE.channel.writeAndFlush(new TankStartMoveMsg(GameModel.getInstance().mytank));
-        }
+    private void updateTank() {
+        Tank t = (Tank) GameModel.INSTANCE.findByUUID(id);
+        t.x = x;
+        t.y = y;
+        t.setDir(dir);
+        t.setMoving(true);
     }
 
     @Override
     public void parse(byte[] bytes) {
+        ByteArrayInputStream bais = null;
+        DataInputStream dis = null;
 
+        try {
+            bais = new ByteArrayInputStream(bytes);
+            dis = new DataInputStream(bais);
+
+            x = dis.readInt();
+            y = dis.readInt();
+
+            dir = Dir.values()[dis.readInt()];
+            id = new UUID(dis.readLong(), dis.readLong());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (dis != null)
+                try {
+                    dis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            if (bais != null)
+                try {
+                    bais.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+        }
     }
 
 

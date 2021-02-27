@@ -3,6 +3,7 @@ package TankBattle;
 import Collider.CorChain;
 import net.Client;
 import net.Msg.TankJoinMsg;
+import net.Msg.TankStartMoveMsg;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -176,6 +177,7 @@ public class GameModel {
 
         //根据键盘布尔值改变方向
         setdir();
+        Client.INSTANCE.send(new TankStartMoveMsg(mytank));
         //加入坦克移动的音效
         //new Thread(()->new Audio("audio/tank_move.wav").play()).start();
     }

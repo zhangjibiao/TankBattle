@@ -84,13 +84,15 @@ public class TankJoinMsg extends Msg {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append(this.getClass().getName())
-                .append(":[")
-                .append("UUiD=" + this.id + "   ")
-                .append("x=" + this.x + " y=" + this.y + "  dir=" + this.dir)
-                .append("   group=" + this.group)
-                .append("  live=" + this.live)
-                .append("]");
+        builder.append("\n")
+                .append("<" + msgType + ">")
+                .append("\n")
+                .append("UUiD=" + this.id.getLeastSignificantBits())
+                .append("\tx=" + this.x)
+                .append("\ty=" + this.y)
+                .append("\tdir=" + this.dir)
+                .append("\tgroup=" + this.group)
+                .append("live=" + this.live);
         return builder.toString();
     }
 
@@ -137,7 +139,6 @@ public class TankJoinMsg extends Msg {
     public void handle() {
         if (GameModel.getInstance().findByUUID(id) != null) return;
         else {
-            System.out.println(this);
             GameModel.getInstance().newTankJoin(this);
 
             //让后加入的坦克能够看到自己
