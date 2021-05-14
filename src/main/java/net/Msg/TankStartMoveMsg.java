@@ -2,6 +2,7 @@ package net.Msg;
 
 import TankBattle.Dir;
 import TankBattle.GameModel;
+import TankBattle.PropertyMgr;
 import TankBattle.Tank;
 
 import java.io.*;
@@ -11,6 +12,8 @@ public class TankStartMoveMsg extends Msg {
     public int x, y;
     public Dir dir;
     public UUID id;
+    private static final int SPEED = Integer.parseInt((String) PropertyMgr.getValue("tankSpeed"));
+
 
     public TankStartMoveMsg(int x, int y, Dir dir, UUID id) {
         this.x = x;
@@ -91,7 +94,7 @@ public class TankStartMoveMsg extends Msg {
         t.x = x;
         t.y = y;
         t.setDir(dir);
-        t.setMoving(true);
+        //t.setMoving(true);
     }
 
     @Override

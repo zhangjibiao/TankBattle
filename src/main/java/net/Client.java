@@ -1,6 +1,7 @@
 package net;
 
 import TankBattle.GameModel;
+import TankBattle.TankBattle;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -15,6 +16,10 @@ import net.Msg.TankMsgEncoder;
 public class Client {
     public static final Client INSTANCE = new Client();
     public Channel channel;
+
+    public static void main(String[] args) {
+        Client.INSTANCE.connect();
+    }
 
     private Client() {
     }
@@ -40,6 +45,9 @@ public class Client {
                     } else {
                         System.out.println("<Client connect to Server!>");
                         channel = future.channel();
+                        new Thread(() -> {
+                            TankBattle.start();
+                        }).start();
                     }
                 }
             });

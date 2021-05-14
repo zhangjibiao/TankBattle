@@ -18,14 +18,14 @@ public class TankStopMsg extends Msg {
     }
 
     public TankStopMsg() {
-        super.msgType = MsgType.TankJoinMsg;
+        super.msgType = MsgType.TankStopMsg;
     }
 
     public TankStopMsg(Tank tank) {
         x = tank.x;
         y = tank.y;
         this.id = tank.id;
-        super.msgType = MsgType.TankJoinMsg;
+        super.msgType = MsgType.TankStopMsg;
     }
 
     //通过bytes给自己的属性赋值

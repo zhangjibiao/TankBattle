@@ -54,12 +54,6 @@ public class GameModel {
         addGo(new Wall(0, 200, 300, 60));
         addGo(new Wall(240, 260, 60, 200));
         addGo(new Wall(600, 30, 60, 150));
-
-        //画出敌军坦克
-//        addEnemies()
-        new Thread(() -> {
-            Client.INSTANCE.connect();
-        }).start();
     }
 
     void addGo(GameObject o) {
@@ -98,9 +92,6 @@ public class GameModel {
         //显示子弹，敌人数量
         Color c = g.getColor();
         g.setColor(Color.WHITE);
-//        g.drawString("子弹的数量:" + bullets.size(), 10, 60);
-//        g.drawString("敌人的数量:" + enemies.size(), 10, 100);
-//        g.drawString("爆炸的数量:" + explodes.size(), 10, 140);
         g.setColor(c);
 
         //碰撞检测
@@ -122,7 +113,7 @@ public class GameModel {
 
 
     public void KeyReleased(int key) {
-        if (mytank.istMoving() == false) mytank.setMoving(true);
+        if (mytank.istMoving() == false) mytank.setMoving(true);//??
         switch (key) {
             case (KeyEvent.VK_LEFT):
                 BL = false;
@@ -142,14 +133,18 @@ public class GameModel {
             default:
                 break;
         }
-        //根据键盘布尔值改变方向
+        //根据键盘布尔值停止移动或改变方向
+        if (!BU && !BD && !BL && !BR) {
+            mytank.setMoving(false);
+            Client.INSTANCE.send(new TankStopMsg(mytank));
+        }
         setdir();
     }
 
     private void setdir() {
         if (!BU && !BD && !BL && !BR) {
             mytank.setMoving(false);
-            Client.INSTANCE.send(new TankStopMsg(mytank));
+            //Client.INSTANCE.send(new TankStopMsg(mytank));
         }
         else {
             mytank.setMoving(true);
@@ -182,8 +177,6 @@ public class GameModel {
         //根据键盘布尔值改变方向
         setdir();
         Client.INSTANCE.send(new TankStartMoveMsg(mytank));
-        //加入坦克移动的音效
-        //new Thread(()->new Audio("audio/tank_move.wav").play()).start();
     }
 
     public void newTankJoin(TankJoinMsg msg) {
@@ -192,14 +185,5 @@ public class GameModel {
 
     public GameObject findByUUID(UUID id) {
         return go.get(id);
-        /*GameObject o;
-        Iterator<GameObject> it = go.iterator();
-        while (it.hasNext()) {
-            o = it.next();
-            if (o instanceof Tank && ((Tank) o).id.equals(id) ) {
-                return (Tank) o;
-            }
-        }
-        return null;*/
     }
 }

@@ -4,7 +4,7 @@ package TankBattle;
 
 
 public class TankBattle {
-    public static void main(String[] args) throws InterruptedException {
+    public static void start() {
         TankFrame f = new TankFrame();
 
 
