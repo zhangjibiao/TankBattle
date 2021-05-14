@@ -78,13 +78,10 @@ public class GameModel {
         //显示子弹，敌人数量
         Color c = g.getColor();
         g.setColor(Color.WHITE);
-//        g.drawString("子弹的数量:" + bullets.size(), 10, 60);
-//        g.drawString("敌人的数量:" + enemies.size(), 10, 100);
-//        g.drawString("爆炸的数量:" + explodes.size(), 10, 140);
+
         g.setColor(c);
 
         //碰撞检测
-        //Idea： 每个坦克添加bullet数组，如果是自己的bullet则无伤害
         for (int i = 0; i < go.size(); i++) {
             for (int j = i + 1; j < go.size(); j++) {
                 //碰撞检测
@@ -137,7 +134,5 @@ public class GameModel {
 
         //根据键盘布尔值改变方向
         setdir();
-        //加入坦克移动的音效
-        //new Thread(()->new Audio("audio/tank_move.wav").play()).start();
     }
 }
