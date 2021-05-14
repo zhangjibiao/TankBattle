@@ -138,44 +138,49 @@ public class GameModel {
             mytank.setMoving(false);
             Client.INSTANCE.send(new TankStopMsg(mytank));
         }
-        setdir();
     }
 
-    private void setdir() {
-        if (!BU && !BD && !BL && !BR) {
-            mytank.setMoving(false);
-            //Client.INSTANCE.send(new TankStopMsg(mytank));
-        }
-        else {
-            mytank.setMoving(true);
-
-            if (BU) mytank.setDir(Dir.UP);
-            if (BD) mytank.setDir(Dir.DOWN);
-            if (BR) mytank.setDir(Dir.RIGHT);
-            if (BL) mytank.setDir(Dir.LEFT);
-        }
-    }
+//    private void setdir() {
+//        if (!BU && !BD && !BL && !BR) {
+//            mytank.setMoving(false);
+//            //Client.INSTANCE.send(new TankStopMsg(mytank));
+//        }
+//        else {
+//            mytank.setMoving(true);
+//
+//            if (BU) mytank.setDir(Dir.UP);
+//            if (BD) mytank.setDir(Dir.DOWN);
+//            if (BR) mytank.setDir(Dir.RIGHT);
+//            if (BL) mytank.setDir(Dir.LEFT);
+//        }
+//    }
 
     public void keyPressed(int key) {
         switch (key) {
             case (KeyEvent.VK_LEFT):
                 BL = true;
+                mytank.setDir(Dir.LEFT);
+                mytank.setMoving(true);
                 break;
             case (KeyEvent.VK_RIGHT):
                 BR = true;
+                mytank.setDir(Dir.RIGHT);
+                mytank.setMoving(true);
                 break;
             case (KeyEvent.VK_UP):
                 BU = true;
+                mytank.setDir(Dir.UP);
+                mytank.setMoving(true);
                 break;
             case (KeyEvent.VK_DOWN):
                 BD = true;
+                mytank.setDir(Dir.DOWN);
+                mytank.setMoving(true);
                 break;
             default:
                 break;
         }
 
-        //根据键盘布尔值改变方向
-        setdir();
         Client.INSTANCE.send(new TankStartMoveMsg(mytank));
     }
 

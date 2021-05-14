@@ -94,7 +94,7 @@ public class TankStartMoveMsg extends Msg {
         t.x = x;
         t.y = y;
         t.setDir(dir);
-        //t.setMoving(true);
+        t.setMoving(true);
     }
 
     @Override
