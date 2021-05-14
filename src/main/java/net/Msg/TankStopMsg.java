@@ -117,6 +117,4 @@ public class TankStopMsg extends Msg {
             t.y = y;
         }
     }
-
-
 }

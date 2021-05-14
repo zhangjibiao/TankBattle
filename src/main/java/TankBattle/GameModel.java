@@ -140,21 +140,6 @@ public class GameModel {
         }
     }
 
-//    private void setdir() {
-//        if (!BU && !BD && !BL && !BR) {
-//            mytank.setMoving(false);
-//            //Client.INSTANCE.send(new TankStopMsg(mytank));
-//        }
-//        else {
-//            mytank.setMoving(true);
-//
-//            if (BU) mytank.setDir(Dir.UP);
-//            if (BD) mytank.setDir(Dir.DOWN);
-//            if (BR) mytank.setDir(Dir.RIGHT);
-//            if (BL) mytank.setDir(Dir.LEFT);
-//        }
-//    }
-
     public void keyPressed(int key) {
         switch (key) {
             case (KeyEvent.VK_LEFT):

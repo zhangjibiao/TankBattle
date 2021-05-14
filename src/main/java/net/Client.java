@@ -86,33 +86,13 @@ class ClientChannelInitializer extends ChannelInitializer<SocketChannel> {
 class ClientHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        //第一次连上可用，Netty最终使用ByteBuf来发送数据，ByteBuf效率高，Direct Memory
-        // 因为直接使用win中的内存，而不是从win中接收的数据再
-        //拷贝一份
-//        ByteBuf buf = Unpooled.copiedBuffer("Hello".getBytes());
-//        ctx.writeAndFlush(buf);//写出去并且释放buf的引用
         ctx.writeAndFlush(new TankJoinMsg(GameModel.getInstance().mytank));
-//        ctx.writeAndFlush(new TankJoinMsg(10, 20, Dir.UP, false, Group.Bad, UUID.randomUUID(), false));
-
     }
 
     @Override
     //ctx是上下文
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-//        ByteBuf buf = null;
-//        try{
-//            buf = (ByteBuf) msg;//
-//            byte[] bytes = new byte[buf.readableBytes()];//可读的字节数
-//            buf.getBytes(buf.readerIndex(),bytes);//第一个参数是从buf的哪里开始读，第二个是放到哪里
-////            ClientFrame.getINSTANCE().showMsg(new String(bytes)); 不需要向这个窗口发送数据了
-//            ServerFrame.INSTANCE.updateClientMsg(new String(bytes));
-//
-//
-//        }finally {
-//            if(buf != null) ReferenceCountUtil.release(buf);//释放buf
-//        }
         ((Msg) msg).handle();
     }
-
 }
 

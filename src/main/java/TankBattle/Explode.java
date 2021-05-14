@@ -19,8 +19,6 @@ public class Explode extends GameObject {
     }
 
     public void paint(Graphics g) {
-        //for(BufferedImage img:img){
-        //   g.drawImage(img, x, y,null);
         g.drawImage(ResourceMgr.Explode[step++], x, y, null);
         if (step >= ResourceMgr.Explode.length)
             gm.go.remove(this);

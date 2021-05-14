@@ -7,7 +7,6 @@ public class TankBattle {
     public static void start() {
         TankFrame f = new TankFrame();
 
-
         while (true) {
             try {
                 Thread.sleep(50);
@@ -16,7 +15,5 @@ public class TankBattle {
             }
             f.repaint();
         }
-
-
     }
 }

@@ -75,21 +75,6 @@ class ServerChildHandler extends ChannelInboundHandlerAdapter {
     @Override
     //每一个客户端传过来的是msg
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-//        ByteBuf buf;
-//        buf = (ByteBuf) msg;//
-//        byte[] bytes = new byte[buf.readableBytes()];//可读的字节数
-//        buf.getBytes(buf.readerIndex(),bytes);//第一个参数是从buf的哪里开始读，第二个是放到哪里
-//
-//        String s = new String(bytes);
-//        if(s.equals("_bye_")){
-//            ServerFrame.INSTANCE.updateServerMsg("<客户端退出！>");
-//            Server.clients.remove(ctx.channel());
-//            ctx.close();
-//        }else{
-//            Server.clients.writeAndFlush(msg);
-//            ServerFrame.INSTANCE.updateServerMsg(s);
-//        }
-//        Server.clients.writeAndFlush(msg);
         Iterator<Channel> it = Server.clients.iterator();
         Channel c;
         while (it.hasNext()) {
@@ -98,6 +83,5 @@ class ServerChildHandler extends ChannelInboundHandlerAdapter {
                 c.writeAndFlush(msg);
         }
         System.out.println(msg.toString());
-
     }
 }
